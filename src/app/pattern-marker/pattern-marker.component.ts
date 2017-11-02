@@ -4,6 +4,10 @@ import { OnInit, AfterViewInit, Component, ElementRef, Input, ViewChild, HostLis
 import { ArService } from '../ar.service';
 import { ThreeService } from '../three.service';
 
+interface Navigator {
+  getMedia: any;
+}
+
 /**
  * Takes a pattern image and optional model to render AR
  * Uses ArService to get the user media and ThreeService to render 3D scene.
@@ -23,6 +27,9 @@ export class PatternMarkerComponent implements OnInit {
   }
 
   private arScene: any;
+  private streaming: boolean;
+  private width: number;
+  private height: number;
 
   private get canvas(): HTMLCanvasElement {
     return this.canvasRef.nativeElement;
@@ -30,6 +37,13 @@ export class PatternMarkerComponent implements OnInit {
 
   @ViewChild('canvas')
   private canvasRef: ElementRef;
+
+  private get video(): HTMLVideoElement {
+    return this.videoRef.nativeElement;
+  }
+
+  @ViewChild('video')
+  private videoRef: ElementRef;
 
   @Input()
   set model(model: string) {
@@ -40,18 +54,52 @@ export class PatternMarkerComponent implements OnInit {
     console.log('clicked parent');
   }
 
-  constructor(private service: ArService, private three: ThreeService, private ngRenderer: Renderer2, private ngZone: NgZone) { }
+  constructor(private service: ArService, private three: ThreeService, private ngRenderer: Renderer2, private ngZone: NgZone) {
+    this.width = 320;
+   }
 
   ngOnInit() {
     // marker tracking from demo
     //this.service.initAR()(this.arCallback.bind(this));
 
     // BASIC: add three js geometry to scene
-    this.basicAR();
+    //this.basicGeometry();
 
+    // INTERMEDIATE: add geometry with transparent background to video stream
+    this.startVideoStream();
   }
 
-  basicAR() {
+  setVideoDimensions(this, ev){
+    if (!this.streaming) {
+      this.height = this.video.videoHeight / (this.video.videoWidth/this.width);
+    
+      // Firefox currently has a bug where the height can't be read from
+      // the video, so we will make assumptions if this happens.
+    
+      if (isNaN(this.height)) {
+        this.height = this.width / (4/3);
+      }
+    
+      this.video.setAttribute('width', this.width.toString());
+      this.video.setAttribute('height', this.height.toString());
+      this.canvas.setAttribute('width', this.width.toString());
+      this.canvas.setAttribute('height', this.height.toString());
+      this.streaming = true;
+    }
+  }
+
+  startVideoStream(){
+    navigator.mediaDevices.getUserMedia({video: true})
+    .then((stream) => {
+      var vendorURL = window.URL;
+      this.video.src = vendorURL.createObjectURL(stream);
+      this.video.play();})
+    .catch((err) => {console.log("An error occured! " + err);});
+    
+    this.video.addEventListener('canplay', (ev) => this.setVideoDimensions(ev), false);
+  }
+
+  basicGeometry() {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
