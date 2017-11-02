@@ -16,14 +16,15 @@ export class ArDirective {
     this.defaultOptions.model = this.three.createModel(model);
   }
   @HostListener('click') onClickHandler(e) {
-    console.log('clicled el', this.defaultOptions.model);
+    console.log('clicked el', this.defaultOptions.model);
     //?
     this.three.clicked();
 
   }
 
   constructor(
-    private service: ArService, private three: ThreeService,
+    private service: ArService, 
+    private three: ThreeService,
     private elementRef: ElementRef,
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,

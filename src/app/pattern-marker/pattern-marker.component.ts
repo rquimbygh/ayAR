@@ -37,13 +37,44 @@ export class PatternMarkerComponent implements OnInit {
   }
 
   @HostListener('click') onClickHandler(e) {
-    console.log('clicled parent');
+    console.log('clicked parent');
   }
 
   constructor(private service: ArService, private three: ThreeService, private ngRenderer: Renderer2, private ngZone: NgZone) { }
 
   ngOnInit() {
-    this.service.initAR()(this.arCallback.bind(this));
+    // marker tracking from demo
+    //this.service.initAR()(this.arCallback.bind(this));
+
+    // BASIC: add three js geometry to scene
+    this.basicAR();
+
+  }
+
+  basicAR() {
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+    var model = this.options.model || this.three.createModel('sphere');
+    this.arScene = scene;
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    scene.add(model);
+    camera.position.z = 5;
+
+    var animate = function () {
+      requestAnimationFrame( animate );
+
+      model.rotation.x += 0.1;
+      model.rotation.y += 0.1;
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
   }
 
   arCallback(arScene, arController, arCamera) {
@@ -65,6 +96,7 @@ export class PatternMarkerComponent implements OnInit {
       markerRoot.add(model);
       arScene.scene.add(markerRoot);
     });
+    
     var tick = function() {
       arScene.process();
       rotationV += (rotationTarget - model.rotation.z) * 0.05;
