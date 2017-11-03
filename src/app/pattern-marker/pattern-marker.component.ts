@@ -107,7 +107,7 @@ export class PatternMarkerComponent implements OnInit {
     var model = this.options.model || this.three.createModel('sphere');
     this.arScene = scene;
 
-    const renderer = new THREE.WebGLRenderer({canvas: this.canvas});
+    const renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
     renderer.setSize( this.width, this.height );
 
     scene.add(model);
