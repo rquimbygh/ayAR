@@ -17,6 +17,7 @@ import { ThreeService } from '../three.service';
 export class PatternMarkerComponent implements OnInit {
 
   private options = {
+    arType: 'basic',
     geometryType: 'sphere',
     model: THREE.Mesh,
     renderer: {},
@@ -63,6 +64,20 @@ export class PatternMarkerComponent implements OnInit {
     this.basicGeometry();
   }
 
+  private get arTypes(): HTMLDivElement {
+    return this.arTypesRef.nativeElement;
+  }
+
+  @ViewChild('arTypes')
+  private arTypesRef: ElementRef;
+
+  public arTypeClick(type: string){
+    if (type == this.options.arType) {
+      return;
+    }
+    this.options.arType = type;
+  }
+
   @HostListener('click') onClickHandler(e) {
     console.log('clicked parent');
   }
@@ -72,19 +87,23 @@ export class PatternMarkerComponent implements OnInit {
    }
 
   ngOnInit() {
-    // marker tracking from demo
-    //this.service.initAR()(this.arCallback.bind(this));
-
-    // BASIC: add three js geometry to scene
-    //this.basicGeometry();
-
-    // INTERMEDIATE: add geometry with transparent background to video stream
-    this.startVideoStream();
-    this.video.addEventListener('canplay', (ev) => {
-      this.setVideoDimensions(ev);
-      this.basicGeometry();
-
-    }, false);
+    switch (this.options.arType) {
+      case 'basic':
+        // add geometry with transparent background to video stream
+        this.startVideoStream();
+        this.video.addEventListener('canplay', (ev) => {
+          this.setVideoDimensions(ev);
+          this.basicGeometry();
+    
+        }, false);
+        return;
+      case 'trackHiro':
+        // marker tracking from demo
+        this.service.initAR()(this.arCallback.bind(this));
+        return;
+      default:
+        // TODO
+    }  
   }
 
   setVideoDimensions(this, ev){
@@ -103,6 +122,7 @@ export class PatternMarkerComponent implements OnInit {
       this.canvas.setAttribute('width', this.width.toString());
       this.canvas.setAttribute('height', this.height.toString());
       this.shapes.style.top = (this.height + 10).toString() + 'px';
+      this.arTypes.style.top = (this.height + 40).toString() + 'px';
       this.streaming = true;
     }
   }
