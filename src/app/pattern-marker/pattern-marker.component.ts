@@ -86,6 +86,7 @@ export class PatternMarkerComponent implements OnInit {
       this.canvas.setAttribute('height', this.height.toString());
       this.streaming = true;
     }
+    this.basicGeometry();
   }
 
   startVideoStream(){
@@ -101,13 +102,13 @@ export class PatternMarkerComponent implements OnInit {
 
   basicGeometry() {
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
 
     var model = this.options.model || this.three.createModel('sphere');
     this.arScene = scene;
 
     const renderer = new THREE.WebGLRenderer({canvas: this.canvas});
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( this.width, this.height );
 
     scene.add(model);
     camera.position.z = 5;
