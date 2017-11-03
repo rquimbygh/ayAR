@@ -21,7 +21,7 @@ interface Navigator {
 export class PatternMarkerComponent implements OnInit {
 
   private options = {
-    model: {},
+    model: THREE.Mesh,
     renderer: {},
     rotationTarget: 0
   }
@@ -105,6 +105,7 @@ export class PatternMarkerComponent implements OnInit {
     var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
 
     var model = this.options.model || this.three.createModel('sphere');
+    model.position.set(3,2,0);
     this.arScene = scene;
 
     const renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});

@@ -17,8 +17,8 @@ export class ThreeService {
     return this.renderer;
   }
 
-  createModel(type) {
-    let model: any;
+  createModel(type): typeof THREE.Mesh {
+    let model: typeof THREE.Mesh ;
     if (type === 'sphere') {
       model = this.createSphere();
     } else if (type === 'torus') {
