@@ -1,2 +1,10 @@
+
 <video #video>Video stream not available.</video>
-<canvas #canvas (window:resize)="onResize($event)" click="canvasClick($event)"></canvas> Pattern component
+<canvas #canvas (window:resize)="onResize($event)" (click)="canvasClick($event)"></canvas>
+
+<div #shapes id="shapes">
+    Shapes:
+    <button (click)="shapeClick('sphere')">Sphere</button>
+    <button (click)="shapeClick('box')">Box</button>
+    <button (click)="shapeClick('torus')">Torus</button>
+</div>

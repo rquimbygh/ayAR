@@ -4,10 +4,6 @@ import { OnInit, AfterViewInit, Component, ElementRef, Input, ViewChild, HostLis
 import { ArService } from '../ar.service';
 import { ThreeService } from '../three.service';
 
-interface Navigator {
-  getMedia: any;
-}
-
 /**
  * Takes a pattern image and optional model to render AR
  * Uses ArService to get the user media and ThreeService to render 3D scene.
@@ -21,6 +17,7 @@ interface Navigator {
 export class PatternMarkerComponent implements OnInit {
 
   private options = {
+    geometryType: 'sphere',
     model: THREE.Mesh,
     renderer: {},
     rotationTarget: 0
@@ -50,6 +47,22 @@ export class PatternMarkerComponent implements OnInit {
     this.options.model = this.three.createModel(model);
   }
 
+  private get shapes(): HTMLDivElement {
+    return this.shapesRef.nativeElement;
+  }
+
+  @ViewChild('shapes')
+  private shapesRef: ElementRef;
+
+  public shapeClick(type: string){
+    if (type == this.options.geometryType) {
+      return;
+    }
+    this.options.model = null;
+    this.options.geometryType = type;
+    this.basicGeometry();
+  }
+
   @HostListener('click') onClickHandler(e) {
     console.log('clicked parent');
   }
@@ -67,6 +80,11 @@ export class PatternMarkerComponent implements OnInit {
 
     // INTERMEDIATE: add geometry with transparent background to video stream
     this.startVideoStream();
+    this.video.addEventListener('canplay', (ev) => {
+      this.setVideoDimensions(ev);
+      this.basicGeometry();
+
+    }, false);
   }
 
   setVideoDimensions(this, ev){
@@ -84,9 +102,9 @@ export class PatternMarkerComponent implements OnInit {
       this.video.setAttribute('height', this.height.toString());
       this.canvas.setAttribute('width', this.width.toString());
       this.canvas.setAttribute('height', this.height.toString());
+      this.shapes.style.top = (this.height + 10).toString() + 'px';
       this.streaming = true;
     }
-    this.basicGeometry();
   }
 
   startVideoStream(){
@@ -96,15 +114,13 @@ export class PatternMarkerComponent implements OnInit {
       this.video.src = vendorURL.createObjectURL(stream);
       this.video.play();})
     .catch((err) => {console.log("An error occured! " + err);});
-    
-    this.video.addEventListener('canplay', (ev) => this.setVideoDimensions(ev), false);
   }
 
   basicGeometry() {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
 
-    var model = this.options.model || this.three.createModel('sphere');
+    var model = this.options.model || this.three.createModel(this.options.geometryType);
     model.position.set(3,2,0);
     this.arScene = scene;
 
@@ -127,7 +143,7 @@ export class PatternMarkerComponent implements OnInit {
   }
 
   arCallback(arScene, arController, arCamera) {
-    var model = this.options.model || this.three.createModel('sphere');
+    var model = this.options.model || this.three.createModel(this.options.geometryType);
     this.arScene = arScene;
     // Add the style according to based on device orientation
     this.ngRenderer.addClass(this.canvas, arController.orientation);
@@ -163,7 +179,7 @@ export class PatternMarkerComponent implements OnInit {
     console.log('resized ', e);
   }
 
-  canvasClick(e) {
+  public canvasClick(e) {
     e.preventDefault();
     this.options.rotationTarget += 1;
   }
