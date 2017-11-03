@@ -76,6 +76,8 @@ export class PatternMarkerComponent implements OnInit {
       return;
     }
     this.options.arType = type;
+    this.options.model = null;
+    this.ngOnInit();
   }
 
   @HostListener('click') onClickHandler(e) {
@@ -91,11 +93,14 @@ export class PatternMarkerComponent implements OnInit {
       case 'basic':
         // add geometry with transparent background to video stream
         this.startVideoStream();
-        this.video.addEventListener('canplay', (ev) => {
-          this.setVideoDimensions(ev);
+        if (this.streaming){
           this.basicGeometry();
-    
-        }, false);
+        } else {
+          this.video.addEventListener('canplay', (ev) => {
+            this.setVideoDimensions(ev);
+            this.basicGeometry();    
+          }, false);
+        }        
         return;
       case 'trackHiro':
         // marker tracking from demo
@@ -144,19 +149,21 @@ export class PatternMarkerComponent implements OnInit {
     model.position.set(3,2,0);
     this.arScene = scene;
 
-    const renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
+    var renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
     renderer.setSize( this.width, this.height );
 
     scene.add(model);
     camera.position.z = 5;
 
-    var animate = function () {
-      requestAnimationFrame( animate );
-
-      model.rotation.x += 0.1;
-      model.rotation.y += 0.1;
-
-      renderer.render(scene, camera);
+    var animate = () => {
+      if (this.options.arType == 'basic') {
+        requestAnimationFrame( animate );
+        
+        model.rotation.x += 0.1;
+        model.rotation.y += 0.1;
+  
+        renderer.render(scene, camera);
+      }
     };
 
     animate();
@@ -165,11 +172,13 @@ export class PatternMarkerComponent implements OnInit {
   arCallback(arScene, arController, arCamera) {
     var model = this.options.model || this.three.createModel(this.options.geometryType);
     this.arScene = arScene;
+    arController.videoHeight = this.height;
+    arController.videoWidth = this.width;
     // Add the style according to based on device orientation
     this.ngRenderer.addClass(this.canvas, arController.orientation);
 
     // Create a webgl renderer using the component canvasRef
-    const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: this.canvas });
+    var renderer = new THREE.WebGLRenderer({ antialias: true, canvas: this.canvas });
     let rotationV = 0;
     let rotationTarget = 0;
     this.service.setCameraSize(arController, renderer);
@@ -182,13 +191,15 @@ export class PatternMarkerComponent implements OnInit {
       arScene.scene.add(markerRoot);
     });
     
-    var tick = function() {
-      arScene.process();
-      rotationV += (rotationTarget - model.rotation.z) * 0.05;
-      model.rotation.z += rotationV;
-      rotationV *= 0.8;
-      arScene.renderOn(renderer);
-      requestAnimationFrame(tick);
+    var tick = () => {
+      if (this.options.arType == 'trackHiro') {
+        arScene.process();
+        rotationV += (rotationTarget - model.rotation.z) * 0.05;
+        model.rotation.z += rotationV;
+        rotationV *= 0.8;
+        arScene.renderOn(renderer);
+        requestAnimationFrame(tick);
+      }
     };
     tick();
     // this.tick.bind(this, arScene);
