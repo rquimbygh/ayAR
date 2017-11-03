@@ -1,6 +1,7 @@
 
 <video #video>Video stream not available.</video>
 <canvas #canvas (window:resize)="onResize($event)" (click)="canvasClick($event)"></canvas>
+<canvas #hiddenCanvas id='hiddenCanvas'></canvas>
 
 <div #shapes id="shapes">
     Shapes:
@@ -14,4 +15,9 @@
         <button (click)="arTypeClick('basic')">Basic overlay</button>
         <button (click)="arTypeClick('trackHiro')">Track hiro image</button>
         <button (click)="arTypeClick('trackTexture')">Track texture</button>
+</div>
+
+<div #trackTexture id="trackTexture" style="display: none;">
+        When tracking texture:
+        1. <button (click)="captureImageClick()">Take Photo</button> <br>
 </div>

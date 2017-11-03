@@ -36,6 +36,13 @@ export class PatternMarkerComponent implements OnInit {
   @ViewChild('canvas')
   private canvasRef: ElementRef;
 
+  private get hiddenCanvas(): HTMLCanvasElement {
+    return this.canvasRef.nativeElement;
+  }
+
+  @ViewChild('hiddenCanvas')
+  private hiddenCanvasRef: ElementRef;
+
   private get video(): HTMLVideoElement {
     return this.videoRef.nativeElement;
   }
@@ -75,10 +82,22 @@ export class PatternMarkerComponent implements OnInit {
     if (type == this.options.arType) {
       return;
     }
+    if (type == 'trackTexture') {
+      this.trackTexture.style.display = 'inline';
+    } else {
+      this.trackTexture.style.display = 'none';
+    }
     this.options.arType = type;
     this.options.model = null;
     this.ngOnInit();
   }
+
+  private get trackTexture(): HTMLDivElement {
+    return this.trackTextureRef.nativeElement;
+  }
+
+  @ViewChild('trackTexture')
+  private trackTextureRef: ElementRef;
 
   @HostListener('click') onClickHandler(e) {
     console.log('clicked parent');
@@ -128,6 +147,7 @@ export class PatternMarkerComponent implements OnInit {
       this.canvas.setAttribute('height', this.height.toString());
       this.shapes.style.top = (this.height + 10).toString() + 'px';
       this.arTypes.style.top = (this.height + 40).toString() + 'px';
+      this.trackTexture.style.top = (this.height + 70).toString() + 'px';
       this.streaming = true;
     }
   }
@@ -215,6 +235,17 @@ export class PatternMarkerComponent implements OnInit {
     this.options.rotationTarget += 1;
   }
 
+  public captureImageClick(e) {
+    e.preventDefault();
+    var context = this.hiddenCanvas.getContext('2d');
+    if (this.width && this.height) {
+      this.hiddenCanvas.width = this.width;
+      this.hiddenCanvas.height = this.height;
+      context.drawImage(this.video, 0, 0, this.width, this.height);
+    
+      var data = this.hiddenCanvas.toDataURL('image/png');
+    } 
+  }
   // tick(arScene) {
   //   // arScene.process();
   //   // console.log('model ', this)
