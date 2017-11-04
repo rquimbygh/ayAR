@@ -254,10 +254,25 @@ export class PatternMarkerComponent implements OnInit {
     if (this.width && this.height) {
       this.hiddenCanvas.width = this.width;
       this.hiddenCanvas.height = this.height;
-      context.drawImage(this.video, 0, 0, this.width, this.height);
-    
+      context.drawImage(this.video, 0, 0, this.width, this.height);    
       var data = this.hiddenCanvas.toDataURL('image/png');
-      this.photo.setAttribute('src', data);
+
+      var imageObj = new Image();
+      imageObj.onload = () => {
+        // draw cropped image
+        var sourceX = 150;
+        var sourceY = 0;
+        var sourceWidth = 150;
+        var sourceHeight = 150;
+        var destWidth = sourceWidth;
+        var destHeight = sourceHeight;
+        var destX = this.hiddenCanvas.width / 2 - destWidth / 2;
+        var destY = this.hiddenCanvas.height / 2 - destHeight / 2;
+        context.clearRect(0, 0, this.hiddenCanvas.width, this.hiddenCanvas.height);
+        context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+      }
+      imageObj.src = data;
+      this.photo.setAttribute('src', imageObj.src);
     } 
   }
   // tick(arScene) {

@@ -1,7 +1,7 @@
 
 <video #video>Video stream not available.</video>
 <canvas #canvas (window:resize)="onResize($event)" (click)="canvasClick($event)"></canvas>
-<canvas #hiddenCanvas id='hiddenCanvas'></canvas>
+<canvas #hiddenCanvas id='hiddenCanvas' ></canvas>
 
 <div #photo id="photo">
    <img alt="The screen capture will appear in this box.">   
@@ -23,5 +23,5 @@
 
 <div #trackTexture id="trackTexture" style="display: none;">
         When tracking texture:
-        1. <button (click)="captureImageClick()">Take Photo</button> <br>
+        1. <button (click)="captureImageClick($event)">Take Photo</button> <br>
 </div>
