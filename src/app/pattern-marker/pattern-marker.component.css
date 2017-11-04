@@ -11,14 +11,15 @@ canvas {
   top: 0;
   left: 0;
 }
-canvas {
+
+#arCanvas {
   z-index: 10;
 }
 
 #hiddenCanvas{
-  display: none;
+  /* display: none; */
 }
 
-#shapes, #arTypes, #trackTexture {
+#shapes, #arTypes, #trackTexture, #photo {
   position: absolute;
 }

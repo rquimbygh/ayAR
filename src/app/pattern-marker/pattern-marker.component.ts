@@ -37,11 +37,22 @@ export class PatternMarkerComponent implements OnInit {
   private canvasRef: ElementRef;
 
   private get hiddenCanvas(): HTMLCanvasElement {
-    return this.canvasRef.nativeElement;
+    return this.hiddenCanvasRef.nativeElement;
   }
 
   @ViewChild('hiddenCanvas')
   private hiddenCanvasRef: ElementRef;
+
+  private get photoDiv(): HTMLDivElement {
+    return this.photoRef.nativeElement;
+  }
+
+  private get photo(): HTMLImageElement {
+    return this.photoDiv.getElementsByTagName('img')[0];
+  }
+
+  @ViewChild('photo')
+  private photoRef: ElementRef;
 
   private get video(): HTMLVideoElement {
     return this.videoRef.nativeElement;
@@ -99,10 +110,6 @@ export class PatternMarkerComponent implements OnInit {
   @ViewChild('trackTexture')
   private trackTextureRef: ElementRef;
 
-  @HostListener('click') onClickHandler(e) {
-    console.log('clicked parent');
-  }
-
   constructor(private service: ArService, private three: ThreeService, private ngRenderer: Renderer2, private ngZone: NgZone) {
     this.width = 320;
    }
@@ -145,9 +152,15 @@ export class PatternMarkerComponent implements OnInit {
       this.video.setAttribute('height', this.height.toString());
       this.canvas.setAttribute('width', this.width.toString());
       this.canvas.setAttribute('height', this.height.toString());
+      this.hiddenCanvas.setAttribute('width', this.width.toString());
+      this.hiddenCanvas.setAttribute('height', this.height.toString());
       this.shapes.style.top = (this.height + 10).toString() + 'px';
       this.arTypes.style.top = (this.height + 40).toString() + 'px';
       this.trackTexture.style.top = (this.height + 70).toString() + 'px';
+
+      this.photoDiv.style.top = (this.height + 100).toString() + 'px';
+      this.hiddenCanvas.style.top = (this.height + 110 + this.height).toString() + 'px';       
+
       this.streaming = true;
     }
   }
@@ -244,6 +257,7 @@ export class PatternMarkerComponent implements OnInit {
       context.drawImage(this.video, 0, 0, this.width, this.height);
     
       var data = this.hiddenCanvas.toDataURL('image/png');
+      this.photo.setAttribute('src', data);
     } 
   }
   // tick(arScene) {
