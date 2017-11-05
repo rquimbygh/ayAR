@@ -196,7 +196,7 @@ export class PatternMarkerComponent implements OnInit {
         model.rotation.y += 0.1;
   
         renderer.render(scene, camera);
-      }
+      } 
     };
 
     animate();
@@ -270,6 +270,11 @@ export class PatternMarkerComponent implements OnInit {
         var destY = this.hiddenCanvas.height / 2 - destHeight / 2;
         context.clearRect(0, 0, this.hiddenCanvas.width, this.hiddenCanvas.height);
         context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        
+        //draw black border
+        context.strokeStyle = 'black';
+        context.lineWidth = 20;     
+        context.strokeRect(destX, destY, sourceWidth, sourceHeight );
       }
       imageObj.src = data;
       this.photo.setAttribute('src', imageObj.src);
