@@ -128,6 +128,17 @@ export class PatternMarkerComponent implements OnInit {
           }, false);
         }        
         return;
+      case 'unity':
+        this.startVideoStream();
+        if (this.streaming){
+          this.loadUnityModel();
+        } else {
+          this.video.addEventListener('canplay', (ev) => {
+            this.setVideoDimensions(ev);
+            this.loadUnityModel();    
+          }, false);
+        }  
+        return;
       case 'trackHiro':
         // marker tracking from demo
         this.service.initAR()(this.arCallback.bind(this));
@@ -174,7 +185,7 @@ export class PatternMarkerComponent implements OnInit {
     .catch((err) => {console.log("An error occured! " + err);});
   }
 
-  basicGeometry() {
+  basicGeometry() {    
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
 
@@ -202,7 +213,55 @@ export class PatternMarkerComponent implements OnInit {
     animate();
   }
 
-  arCallback(arScene, arController, arCamera) {
+  loadUnityModel(){
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );    
+    this.arScene = scene;
+
+    camera.position.z = 5;
+
+    var renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
+    renderer.setSize( this.width, this.height );
+
+    var loader = new THREE.ObjectLoader();
+    loader.load(
+        // resource URL
+        "assets/fish_scene.json",
+    
+        // pass the loaded data to the onLoad function.
+        //Here it is assumed to be an object
+        function ( obj ) {
+        //add the loaded object to the scene
+            scene.add( obj );
+        },
+    
+        // Function called when download progresses
+        function ( xhr ) {
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+    
+        // Function called when download errors
+        function ( xhr ) {
+            console.error( 'An error happened' );
+        }
+    );
+       
+    // Alternatively, to parse a previously loaded JSON structure
+    //var object = loader.parse( a_json_object );
+    //scene.add( object );
+
+    var animate = () => {
+      if (this.options.arType == 'unity') {
+        requestAnimationFrame( animate );
+  
+        renderer.render(scene, camera);
+      } 
+    };
+
+    animate();
+  }
+
+  arCallback(arScene, arController, arCamera) {    
     var model = this.options.model || this.three.createModel(this.options.geometryType);
     this.arScene = arScene;
     arController.videoHeight = this.height;
@@ -232,7 +291,7 @@ export class PatternMarkerComponent implements OnInit {
         rotationV *= 0.8;
         arScene.renderOn(renderer);
         requestAnimationFrame(tick);
-      }
+      } 
     };
     tick();
     // this.tick.bind(this, arScene);
@@ -246,6 +305,14 @@ export class PatternMarkerComponent implements OnInit {
   public canvasClick(e) {
     e.preventDefault();
     this.options.rotationTarget += 1;
+  }
+
+  clearCanvas(){
+    //TODO ctx is coming back null
+    var ctx = this.canvas.getContext('2d');
+    var w = this.canvas.width;
+    var h = this.canvas.height;
+    ctx.clearRect(0, 0 , w, h);
   }
 
   public captureImageClick(e) {
