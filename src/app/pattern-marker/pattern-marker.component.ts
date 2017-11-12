@@ -226,7 +226,7 @@ export class PatternMarkerComponent implements OnInit {
     var loader = new THREE.ObjectLoader();
     loader.load(
         // resource URL
-        "assets/fish_scene.json",
+        "assets/cube_scene.json",
     
         // pass the loaded data to the onLoad function.
         //Here it is assumed to be an object
