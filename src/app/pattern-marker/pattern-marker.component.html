@@ -7,12 +7,7 @@
    <img alt="The screen capture will appear in this box.">   
 </div>
 
-<div #shapes id="shapes">
-    Shapes:
-    <button (click)="shapeClick('sphere')">Sphere</button>
-    <button (click)="shapeClick('box')">Box</button>
-    <button (click)="shapeClick('torus')">Torus</button>
-</div>
+<a-shapes (onShapeChange)="onShapeChange($event)"></a-shapes>
 
 <div #arTypes id="arTypes">
         AR Types:

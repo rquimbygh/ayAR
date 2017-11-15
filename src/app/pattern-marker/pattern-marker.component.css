@@ -20,6 +20,6 @@ canvas {
   /* display: none; */
 }
 
-#shapes, #arTypes, #trackTexture, #photo {
+#arTypes, #trackTexture, #photo {
   position: absolute;
 }

@@ -1,6 +1,4 @@
 import { OnInit, AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener, Renderer2, NgZone } from '@angular/core';
-// import { Component, OnInit, ElementRef, Input, ViewChild, HostListener, Renderer2,  } from '@angular/core';
-
 import { ArService } from '../ar.service';
 import { ThreeService } from '../three.service';
 
@@ -66,23 +64,7 @@ export class PatternMarkerComponent implements OnInit {
   set model(model: string) {
     this.options.model = this.three.createModel(model);
   }
-
-  private get shapes(): HTMLDivElement {
-    return this.shapesRef.nativeElement;
-  }
-
-  @ViewChild('shapes')
-  private shapesRef: ElementRef;
-
-  public shapeClick(type: string){
-    if (type == this.options.geometryType) {
-      return;
-    }
-    this.options.model = null;
-    this.options.geometryType = type;
-    this.basicGeometry();
-  }
-
+  
   private get arTypes(): HTMLDivElement {
     return this.arTypesRef.nativeElement;
   }
@@ -166,7 +148,7 @@ export class PatternMarkerComponent implements OnInit {
       this.canvas.setAttribute('height', this.height.toString());
       this.hiddenCanvas.setAttribute('width', this.width.toString());
       this.hiddenCanvas.setAttribute('height', this.height.toString());
-      this.shapes.style.top = (this.height + 10).toString() + 'px';
+
       this.arTypes.style.top = (this.height + 40).toString() + 'px';
       this.trackTexture.style.top = (this.height + 70).toString() + 'px';
 
@@ -184,6 +166,12 @@ export class PatternMarkerComponent implements OnInit {
       this.video.src = vendorURL.createObjectURL(stream);
       this.video.play();})
     .catch((err) => {console.log("An error occured! " + err);});
+  }
+
+  onShapeChange(newShape) {
+    this.options.model = null;
+    this.options.geometryType = newShape;
+    this.basicGeometry();
   }
 
   basicGeometry() {    

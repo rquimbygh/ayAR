@@ -4,16 +4,19 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PatternMarkerComponent } from './pattern-marker/pattern-marker.component';
+import { ShapesComponent } from './shapes/shapes.component';
 
 import { ArService } from './ar.service';
 import { ThreeService } from './three.service';
 import { ArDirective } from './ar.directive';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     PatternMarkerComponent,
-    ArDirective
+    ArDirective,
+    ShapesComponent
   ],
   imports: [
     BrowserModule,
