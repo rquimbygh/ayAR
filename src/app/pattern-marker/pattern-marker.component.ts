@@ -56,31 +56,17 @@ export class PatternMarkerComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.startVideoStream();
+  }
 
-
+  showAR(){
     switch (this.options.arType) {
       case 'basic':
         // add geometry with transparent background to video stream
-        this.startVideoStream();
-        if (this.streaming){
-          this.basicGeometry();
-        } else {
-          this.video.addEventListener('canplay', (ev) => {
-            this.setVideoDimensions(ev);
-            this.basicGeometry();    
-          }, false);
-        }        
+        this.basicGeometry();       
         return;
       case 'unity':
-        this.startVideoStream();
-        if (this.streaming){
-          this.unityModel();
-        } else {
-          this.video.addEventListener('canplay', (ev) => {
-            this.setVideoDimensions(ev);
-            this.unityModel();    
-          }, false);
-        }  
+        this.unityModel();
         return;
       case 'trackHiro':
         // marker tracking from demo
@@ -91,7 +77,25 @@ export class PatternMarkerComponent implements OnInit {
     }  
   }
 
-  setVideoDimensions(this, ev){
+  startVideoStream(){
+    this.video.oncanplay = (ev) => {this.onVideoStreaming(ev)};
+    navigator.mediaDevices.getUserMedia({video: true})
+    .then((stream) => {
+      var vendorURL = window.URL;
+      this.video.src = vendorURL.createObjectURL(stream);
+      this.video.play();})
+    .catch((err) => {console.log("An error occured! " + err);});
+  }
+
+  onVideoStreaming(this, ev){
+    this.setVideoDimensions();
+    this.arTypesComponent.width = this.width;
+    this.arTypesComponent.height = this.height;
+    this.arTypesComponent.video = this.video;
+    this.showAR();
+  }
+
+  setVideoDimensions(){
     if (!this.streaming) {
       this.height = this.video.videoHeight / (this.video.videoWidth/this.width);
     
@@ -111,21 +115,6 @@ export class PatternMarkerComponent implements OnInit {
     }
   }
 
-  startVideoStream(){
-    navigator.mediaDevices.getUserMedia({video: true})
-    .then((stream) => {
-      var vendorURL = window.URL;
-      this.video.src = vendorURL.createObjectURL(stream);
-      this.video.play();})
-    .catch((err) => {console.log("An error occured! " + err);});
-  }
-
-  tellArTypesComponentAboutVideoEl(){
-    this.arTypesComponent.width = this.width;
-    this.arTypesComponent.height = this.height;
-    this.arTypesComponent.video = this.video;
-  }
-
   onShapeChange(newShape) {
     this.options.model = null;
     this.options.geometryType = newShape;
@@ -135,7 +124,7 @@ export class PatternMarkerComponent implements OnInit {
   onArTypeChange(newType){
     this.options.model = null;    
     this.options.arType = newType;
-    this.ngOnInit(); //TODO change this
+    this.showAR(); 
   }
 
   basicGeometry() {    
