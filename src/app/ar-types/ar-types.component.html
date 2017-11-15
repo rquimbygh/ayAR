@@ -6,7 +6,7 @@
   <button (click)="arTypeClick('trackTexture')">Track texture</button>
 </div>
 
-<div #trackTexture id="trackTexture" style="display: none;">
+<div #trackTexture id="trackTexture" [style.display]="arType == 'trackTexture' ? 'inline' : 'none'">
   When tracking texture:
   1. <button (click)="captureImageClick($event)">Take Photo</button> <br>
 </div>

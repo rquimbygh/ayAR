@@ -47,17 +47,11 @@ export class ArTypesComponent implements OnInit {
     return this.photoDiv.getElementsByTagName('img')[0];
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
   
   public arTypeClick(type: string){
     if (type == this.arType) {
       return;
-    }
-    if (type == 'trackTexture') {
-      this.trackTexture.style.display = 'inline';
-    } else {
-      this.trackTexture.style.display = 'none';
     }
 
     this.arType = type;
@@ -68,7 +62,7 @@ export class ArTypesComponent implements OnInit {
     e.preventDefault();
     this.hiddenCanvas.setAttribute('width', this.width.toString());
     this.hiddenCanvas.setAttribute('height', this.height.toString());
-    
+
     var context = this.hiddenCanvas.getContext('2d');
     if (this.width && this.height) {
       this.hiddenCanvas.width = this.width;
