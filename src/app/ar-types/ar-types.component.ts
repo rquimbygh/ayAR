@@ -53,6 +53,9 @@ export class ArTypesComponent implements OnInit {
     if (type == this.arType) {
       return;
     }
+    if (type == 'trackTexture'){
+      this.photo.removeAttribute('src');
+    }
 
     this.arType = type;
     this.onArTypeChange.emit(this.arType);

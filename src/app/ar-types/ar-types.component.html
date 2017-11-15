@@ -13,6 +13,6 @@
 
 <canvas #hiddenCanvas id='hiddenCanvas' ></canvas>
 
-<div #photo id="photo">
+<div #photo id="photo" [style.display]="arType == 'trackTexture' ? 'inline' : 'none'">
    <img alt="The screen capture will appear in this box.">   
 </div>

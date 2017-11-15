@@ -9,7 +9,7 @@
   }
 
   #hiddenCanvas{
-    /* display: none; */
+    display: none; 
     top: 350px;
   }
   
