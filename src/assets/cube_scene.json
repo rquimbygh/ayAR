@@ -6,7 +6,7 @@
 	},
 	"geometries": [
 		{
-			"uuid": "4dd91efe-8dd1-4e5a-8ec6-dce63052eb4b", 
+			"uuid": "4b2b8c4e-246a-432c-a9ee-95c3e837e460", 
 			"type": "Geometry", 
 			"data": {
 				"vertices": [0.5,-0.5,0.5,0.5,-0.5,-0.5,0.5,0.5,0.5,0.5,0.5,-0.5,-0.5,0.5,0.5,-0.5,0.5,-0.5,-0.5,-0.5,0.5,-0.5,-0.5,-0.5,0.5,0.5,0.5,0.5,0.5,-0.5,-0.5,0.5,0.5,-0.5,0.5,-0.5,-0.5,-0.5,0.5,0.5,-0.5,0.5,0.5,-0.5,-0.5,-0.5,-0.5,-0.5,0.5,-0.5,-0.5,0.5,0.5,-0.5,-0.5,0.5,-0.5,-0.5,-0.5,-0.5,-0.5,-0.5,0.5,-0.5,0.5,0.5,0.5,0.5,0.5,0.5,-0.5,0.5],
@@ -18,37 +18,37 @@
 	],
 	"materials": [
 		{
-			"uuid": "a17a4fe5-47a6-4bf1-99e5-fa8b7f7be9c5",
+			"uuid": "00413a28-4447-4c04-9128-59591c2d25e6",
 			"name": "cruscarp", 
 			"type": "MeshPhongMaterial",
 			"color": "0xCCCCCC",
 			"specular": "0x415256",
 			"emissive": "0x000000",
 			"opacity": 1,
-			"map": "f0f7dad9-e0b1-4c4f-b334-f478b021d36a_MainTex",
+			"map": "6c95ea3f-f08f-45cc-8a43-2e1c6a120911_MainTex",
 			"transparent": false,
 			"wireframe": false
 		}
 	],
 	"object": {
-		"uuid": "b06ed684-96a6-4fe7-87bc-ed2092d87147",
+		"uuid": "8716f516-0c07-4c5c-b0d0-c8733dde2da6",
 		"type": "Object3D",
 		"name": "World",
 		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
 		"children": [
 			{
-				"uuid": "a1871388-da11-4996-af3f-555b2a1adcfc",
+				"uuid": "bc160e6b-1ece-4069-a551-5614f0b24079",
 				"type": "AmbientLight",
 				"color": "#363942",
 				"name": "RenderSettingsAmbientLight"
 			},
 			{
-				"uuid": "b5083cab-63bf-4ac5-9423-5b1fc4d16be0",
+				"uuid": "a7c98037-e1fe-433a-a975-235be0594607",
 				"type": "Object3D",
 				"name": "Cube",
 				"children": [
 					{
-						"uuid": "be11ee75-8850-4cf5-82ee-1c14690b8776",
+						"uuid": "1c315192-d112-476e-9f79-bfa2bdc91bc6",
 						"name": "Cube_Collider",
 						"type": "Object3D",
 						"userData": {
@@ -58,35 +58,35 @@
 						}
 					},
 					{
-						"uuid": "abe3b76d-d733-4991-bdaa-d3c28a82ab9d",
+						"uuid": "52d82623-ff66-42cd-92a9-ca055fa6809b",
 						"type": "Mesh",
 						"name": "Cube_SubMesh 0",
-						"geometry": "4dd91efe-8dd1-4e5a-8ec6-dce63052eb4b",
-						"material": "a17a4fe5-47a6-4bf1-99e5-fa8b7f7be9c5",
+						"geometry": "4b2b8c4e-246a-432c-a9ee-95c3e837e460",
+						"material": "00413a28-4447-4c04-9128-59591c2d25e6",
 						"userdata": {}
 					}
 				],
-				"matrix": [0,0,1,0,0.0087,1,0,0,-1,0.0087,0,0,0,0,0,1]
+				"matrix": [0,0,1,0,0,1,0,0,-1,0,0,0,0,0,0,1]
 			}
 		]
 	},
 	"images": [
 		{
 			"url": "cruscarp_cruscarp.png",
-			"uuid": "fa8a3bff-9e94-4272-8683-ca76e0319385",
+			"uuid": "c94c605a-d2cd-41a6-9782-13c4aa366254",
 			"name": "cruscarp_cruscarp.png",
 			"originalUrl": "cruscarp_cruscarp.png"
 		}
 	],
 	"textures": [
 		{
-			"uuid": "f0f7dad9-e0b1-4c4f-b334-f478b021d36a_MainTex",
+			"uuid": "6c95ea3f-f08f-45cc-8a43-2e1c6a120911_MainTex",
 			"offset": [0, 0],
 			"repeat": [1, 1],
 			"magFilter": 1006,
 			"minFilter": 1008,
 			"wrap": [1000,1000],
-			"image": "fa8a3bff-9e94-4272-8683-ca76e0319385",
+			"image": "c94c605a-d2cd-41a6-9782-13c4aa366254",
 			"name": "cruscarp_cruscarp.png",
 			"anisotropy": 16
 		}
