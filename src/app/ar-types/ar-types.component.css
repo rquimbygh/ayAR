@@ -1,0 +1,22 @@
+#arTypes {
+    position: absolute;
+    top: 280px;
+  }
+
+  #trackTexture {
+    position: absolute;
+    top: 310px;
+  }
+
+  #hiddenCanvas{
+    /* display: none; */
+    top: 350px;
+  }
+  
+  #photo {
+    position: absolute;
+    top: 340px;
+  }
+
+  
+  

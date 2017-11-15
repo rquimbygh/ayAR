@@ -1,4 +1,5 @@
 import { OnInit, AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener, Renderer2, NgZone } from '@angular/core';
+import { ArTypesComponent } from '../ar-types/ar-types.component';
 import { ArService } from '../ar.service';
 import { ThreeService } from '../three.service';
 
@@ -28,76 +29,35 @@ export class PatternMarkerComponent implements OnInit {
   private width: number;
   private height: number;
 
-  private get canvas(): HTMLCanvasElement {
-    return this.canvasRef.nativeElement;
-  }
-
   @ViewChild('canvas')
   private canvasRef: ElementRef;
 
-  private get hiddenCanvas(): HTMLCanvasElement {
-    return this.hiddenCanvasRef.nativeElement;
-  }
-
-  @ViewChild('hiddenCanvas')
-  private hiddenCanvasRef: ElementRef;
-
-  private get photoDiv(): HTMLDivElement {
-    return this.photoRef.nativeElement;
-  }
-
-  private get photo(): HTMLImageElement {
-    return this.photoDiv.getElementsByTagName('img')[0];
-  }
-
-  @ViewChild('photo')
-  private photoRef: ElementRef;
-
-  private get video(): HTMLVideoElement {
-    return this.videoRef.nativeElement;
+  private get canvas(): HTMLCanvasElement {
+    return this.canvasRef.nativeElement;
   }
 
   @ViewChild('video')
   private videoRef: ElementRef;
 
+  private get video(): HTMLVideoElement {
+    return this.videoRef.nativeElement;
+  }
+
+  @ViewChild(ArTypesComponent)
+  private arTypesComponent: ArTypesComponent;
+
   @Input()
   set model(model: string) {
     this.options.model = this.three.createModel(model);
   }
-  
-  private get arTypes(): HTMLDivElement {
-    return this.arTypesRef.nativeElement;
-  }
-
-  @ViewChild('arTypes')
-  private arTypesRef: ElementRef;
-
-  public arTypeClick(type: string){
-    if (type == this.options.arType) {
-      return;
-    }
-    if (type == 'trackTexture') {
-      this.trackTexture.style.display = 'inline';
-    } else {
-      this.trackTexture.style.display = 'none';
-    }
-    this.options.arType = type;
-    this.options.model = null;
-    this.ngOnInit();
-  }
-
-  private get trackTexture(): HTMLDivElement {
-    return this.trackTextureRef.nativeElement;
-  }
-
-  @ViewChild('trackTexture')
-  private trackTextureRef: ElementRef;
 
   constructor(private service: ArService, private three: ThreeService, private ngRenderer: Renderer2, private ngZone: NgZone) {
     this.width = 320;
    }
 
   ngOnInit() {
+
+
     switch (this.options.arType) {
       case 'basic':
         // add geometry with transparent background to video stream
@@ -145,15 +105,7 @@ export class PatternMarkerComponent implements OnInit {
       this.video.setAttribute('width', this.width.toString());
       this.video.setAttribute('height', this.height.toString());
       this.canvas.setAttribute('width', this.width.toString());
-      this.canvas.setAttribute('height', this.height.toString());
-      this.hiddenCanvas.setAttribute('width', this.width.toString());
-      this.hiddenCanvas.setAttribute('height', this.height.toString());
-
-      this.arTypes.style.top = (this.height + 40).toString() + 'px';
-      this.trackTexture.style.top = (this.height + 70).toString() + 'px';
-
-      this.photoDiv.style.top = (this.height + 100).toString() + 'px';
-      this.hiddenCanvas.style.top = (this.height + 110 + this.height).toString() + 'px';       
+      this.canvas.setAttribute('height', this.height.toString()); 
 
       this.streaming = true;
     }
@@ -168,10 +120,22 @@ export class PatternMarkerComponent implements OnInit {
     .catch((err) => {console.log("An error occured! " + err);});
   }
 
+  tellArTypesComponentAboutVideoEl(){
+    this.arTypesComponent.width = this.width;
+    this.arTypesComponent.height = this.height;
+    this.arTypesComponent.video = this.video;
+  }
+
   onShapeChange(newShape) {
     this.options.model = null;
     this.options.geometryType = newShape;
     this.basicGeometry();
+  }
+
+  onArTypeChange(newType){
+    this.options.model = null;    
+    this.options.arType = newType;
+    this.ngOnInit(); //TODO change this
   }
 
   basicGeometry() {    
@@ -275,39 +239,6 @@ export class PatternMarkerComponent implements OnInit {
     var w = this.canvas.width;
     var h = this.canvas.height;
     ctx.clearRect(0, 0 , w, h);
-  }
-
-  public captureImageClick(e) {
-    e.preventDefault();
-    var context = this.hiddenCanvas.getContext('2d');
-    if (this.width && this.height) {
-      this.hiddenCanvas.width = this.width;
-      this.hiddenCanvas.height = this.height;
-      context.drawImage(this.video, 0, 0, this.width, this.height);    
-      var data = this.hiddenCanvas.toDataURL('image/png');
-
-      var imageObj = new Image();
-      imageObj.onload = () => {
-        // draw cropped image
-        var sourceX = 150;
-        var sourceY = 0;
-        var sourceWidth = 150;
-        var sourceHeight = 150;
-        var destWidth = sourceWidth;
-        var destHeight = sourceHeight;
-        var destX = this.hiddenCanvas.width / 2 - destWidth / 2;
-        var destY = this.hiddenCanvas.height / 2 - destHeight / 2;
-        context.clearRect(0, 0, this.hiddenCanvas.width, this.hiddenCanvas.height);
-        context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-        
-        //draw black border
-        context.strokeStyle = 'black';
-        context.lineWidth = 20;     
-        context.strokeRect(destX, destY, sourceWidth, sourceHeight );
-      }
-      imageObj.src = data;
-      this.photo.setAttribute('src', imageObj.src);
-    } 
   }
 
 }

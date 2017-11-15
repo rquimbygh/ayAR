@@ -19,6 +19,9 @@ export class ShapesComponent implements OnInit {
   @ViewChild('shapes')
   private shapesRef: ElementRef;
 
+  ngOnInit() {
+  }
+
   public shapeClick(type: string){
     if (type == this.geometry) {
       return;
@@ -26,9 +29,6 @@ export class ShapesComponent implements OnInit {
     
     this.geometry = type;
     this.onShapeChange.emit(this.geometry);
-  }
-
-  ngOnInit() {
   }
 
 }

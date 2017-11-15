@@ -5,10 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PatternMarkerComponent } from './pattern-marker/pattern-marker.component';
 import { ShapesComponent } from './shapes/shapes.component';
+import { ArTypesComponent } from './ar-types/ar-types.component';
 
 import { ArService } from './ar.service';
 import { ThreeService } from './three.service';
 import { ArDirective } from './ar.directive';
+
 
 
 @NgModule({
@@ -16,7 +18,8 @@ import { ArDirective } from './ar.directive';
     AppComponent,
     PatternMarkerComponent,
     ArDirective,
-    ShapesComponent
+    ShapesComponent,
+    ArTypesComponent
   ],
   imports: [
     BrowserModule,

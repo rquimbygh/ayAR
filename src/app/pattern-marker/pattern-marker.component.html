@@ -1,23 +1,5 @@
 
 <video #video>Video stream not available.</video>
 <canvas #canvas (window:resize)="onResize($event)" (click)="canvasClick($event)"></canvas>
-<canvas #hiddenCanvas id='hiddenCanvas' ></canvas>
-
-<div #photo id="photo">
-   <img alt="The screen capture will appear in this box.">   
-</div>
-
 <a-shapes (onShapeChange)="onShapeChange($event)"></a-shapes>
-
-<div #arTypes id="arTypes">
-        AR Types:
-        <button (click)="arTypeClick('basic')">Basic overlay</button>
-        <button (click)="arTypeClick('unity')">Unity overlay</button>
-        <button (click)="arTypeClick('trackHiro')">Track hiro image</button>
-        <button (click)="arTypeClick('trackTexture')">Track texture</button>
-</div>
-
-<div #trackTexture id="trackTexture" style="display: none;">
-        When tracking texture:
-        1. <button (click)="captureImageClick($event)">Take Photo</button> <br>
-</div>
+<a-ar-types (onArTypeChange)="onArTypeChange($event)"></a-ar-types>
