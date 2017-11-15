@@ -67,9 +67,16 @@ export class ThreeService {
   }
 
   createFromObjFile(url, cb){
-    OBJLoader(THREE);
-    var loader = new THREE.OBJLoader();
-    loader.load(
+
+    var manager = new THREE.LoadingManager();
+    manager.onProgress = function ( item, loaded, total ) {
+
+      console.log( item, loaded, total );
+
+    };
+
+    var loader = new THREE.OBJLoader( manager );
+        loader.load(
         // resource URL
         url,
     
