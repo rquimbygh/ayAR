@@ -9,9 +9,9 @@ import { ThreeService } from '../three.service';
  * Uses ArService to get the user media and ThreeService to render 3D scene.
  */
 @Component({
-  selector: 'a-pattern-marker',
-  templateUrl: './pattern-marker.component.html',
-  styleUrls: ['./pattern-marker.component.css']
+  selector: 'a-ar-video',
+  templateUrl: './ar-video.component.html',
+  styleUrls: ['./ar-video.component.css']
 })
 
 export class PatternMarkerComponent implements OnInit {

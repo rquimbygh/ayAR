@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PatternMarkerComponent } from './pattern-marker.component';
+import { PatternMarkerComponent } from './ar-video.component';
 
 describe('PatternMarkerComponent', () => {
   let component: PatternMarkerComponent;
