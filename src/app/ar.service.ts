@@ -22,8 +22,6 @@ export class ArService {
   // pass it an ARCameraParam to define the camera parameters to use when processing images.
   // The ARCameraParam defines the lens distortion and aspect ratio of the camera used.
   aRThreeOnLoad(cb) {
-    // var param = new ARCameraParam();
-
     ARController.getUserMediaThreeScene({
       maxARVideoSize: 320,
       cameraParam: 'assets/Data/camera_para-iPhone 5 rear 640x480 1.0m.dat',

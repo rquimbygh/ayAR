@@ -4,6 +4,7 @@ import { OnInit, AfterViewInit, Component, ElementRef, Input, ViewChild, HostLis
 import { ArService } from '../ar.service';
 import { ThreeService } from '../three.service';
 
+
 /**
  * Takes a pattern image and optional model to render AR
  * Uses ArService to get the user media and ThreeService to render 3D scene.
@@ -131,11 +132,11 @@ export class PatternMarkerComponent implements OnInit {
       case 'unity':
         this.startVideoStream();
         if (this.streaming){
-          this.loadUnityModel();
+          this.unityModel();
         } else {
           this.video.addEventListener('canplay', (ev) => {
             this.setVideoDimensions(ev);
-            this.loadUnityModel();    
+            this.unityModel();    
           }, false);
         }  
         return;
@@ -213,7 +214,7 @@ export class PatternMarkerComponent implements OnInit {
     animate();
   }
 
-  loadUnityModel(){
+  unityModel(){
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );    
     this.arScene = scene;
@@ -223,32 +224,7 @@ export class PatternMarkerComponent implements OnInit {
     var renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
     renderer.setSize( this.width, this.height );
 
-    var loader = new THREE.ObjectLoader();
-    loader.load(
-        // resource URL
-        "assets/cube_scene.json",
-    
-        // pass the loaded data to the onLoad function.
-        //Here it is assumed to be an object
-        function ( obj ) {
-        //add the loaded object to the scene
-            scene.add( obj );
-        },
-    
-        // Function called when download progresses
-        function ( xhr ) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-        },
-    
-        // Function called when download errors
-        function ( xhr ) {
-            console.error( 'An error happened' );
-        }
-    );
-       
-    // Alternatively, to parse a previously loaded JSON structure
-    //var object = loader.parse( a_json_object );
-    //scene.add( object );
+    this.three.createFromObjFile("assets/fish.obj", scene.add);
 
     var animate = () => {
       if (this.options.arType == 'unity') {
@@ -294,8 +270,6 @@ export class PatternMarkerComponent implements OnInit {
       } 
     };
     tick();
-    // this.tick.bind(this, arScene);
-    // this.ngZone.runOutsideAngular(this.tick.bind(this, arScene));
   };
 
   onResize(e) {
@@ -347,18 +321,5 @@ export class PatternMarkerComponent implements OnInit {
       this.photo.setAttribute('src', imageObj.src);
     } 
   }
-  // tick(arScene) {
-  //   // arScene.process();
-  //   // console.log('model ', this)
-  //   // if (this.options.model.rotation) {
-  //   //   rotationV += (this.options.rotationTarget - this.options.model.rotation.z || 0) * 0.05;
-  //   //   this.options.model.rotation.z += rotationV;
-  //   //   rotationV *= 0.8;
-  //   // }
-  //   //
-  //   // arScene.renderOn(this.options.renderer);
-  //   // requestAnimationFrame(() => this.ngZone.runOutsideAngular(this.tick.bind(this, arScene)));
-  // }
-
 
 }

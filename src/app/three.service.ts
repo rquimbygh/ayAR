@@ -66,4 +66,36 @@ export class ThreeService {
     return torus;
   }
 
+  createFromObjFile(url, cb){
+    OBJLoader(THREE);
+    var loader = new THREE.OBJLoader();
+    loader.load(
+        // resource URL
+        url,
+    
+        // pass the loaded data to the onLoad function.
+        //Here it is assumed to be an object
+        function ( obj ) {
+          let fish = new THREE.Mesh(
+            obj,
+            new THREE.MeshNormalMaterial()
+          );
+          fish.material.shading = THREE.FlatShading;
+          fish.position.z = 0.5;
+          //add the loaded object to the scene
+          cb( obj );
+        },
+    
+        // Function called when download progresses
+        function ( xhr ) {
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+    
+        // Function called when download errors
+        function ( xhr ) {
+            console.error( 'An error happened' );
+        }
+    );
+  }
+
 }
