@@ -14,7 +14,7 @@ import { ThreeService } from '../three.service';
   styleUrls: ['./ar-video.component.css']
 })
 
-export class PatternMarkerComponent implements OnInit {
+export class ArVideoComponent implements OnInit {
 
   private options = {
     arType: 'basic',

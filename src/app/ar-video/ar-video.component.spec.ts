@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PatternMarkerComponent } from './ar-video.component';
+import { ArVideoComponent } from './ar-video.component';
 
-describe('PatternMarkerComponent', () => {
-  let component: PatternMarkerComponent;
-  let fixture: ComponentFixture<PatternMarkerComponent>;
+describe('ArVideoComponent', () => {
+  let component: ArVideoComponent;
+  let fixture: ComponentFixture<ArVideoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PatternMarkerComponent ]
+      declarations: [ ArVideoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PatternMarkerComponent);
+    fixture = TestBed.createComponent(ArVideoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

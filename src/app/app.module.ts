@@ -3,7 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PatternMarkerComponent } from './ar-video/ar-video.component';
+import { ArVideoComponent } from './ar-video/ar-video.component';
 import { ShapesComponent } from './shapes/shapes.component';
 import { ArTypesComponent } from './ar-types/ar-types.component';
 
@@ -16,7 +16,7 @@ import { ArDirective } from './ar.directive';
 @NgModule({
   declarations: [
     AppComponent,
-    PatternMarkerComponent,
+    ArVideoComponent,
     ArDirective,
     ShapesComponent,
     ArTypesComponent
