@@ -165,42 +165,7 @@ export class ArVideoComponent implements OnInit {
     var renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
     renderer.setSize( this.width, this.height );
 
-   // this.three.createFromObjFile(, );
-    var manager = new THREE.LoadingManager();
-    manager.onProgress = function ( item, loaded, total ) {
-
-      console.log( item, loaded, total );
-
-    };
-
-    var loader = new THREE.OBJLoader( manager );
-        loader.load(
-        // resource URL
-        "assets/fish.obj",
-    
-        // pass the loaded data to the onLoad function.
-        //Here it is assumed to be an object
-        function ( obj ) {
-          let fish = new THREE.Mesh(
-            obj,
-            new THREE.MeshNormalMaterial()
-          );
-          fish.material.shading = THREE.FlatShading;
-          fish.position.z = 0.5;
-          //add the loaded object to the scene
-          scene.add( obj );
-        },
-    
-        // Function called when download progresses
-        function ( xhr ) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-        },
-    
-        // Function called when download errors
-        function ( xhr ) {
-            console.error( 'An error happened' );
-        }
-    );
+    this.three.createFromObjFile("assets/fish.obj", (obj) => scene.add(obj));
 
     var animate = () => {
       if (this.options.arType == 'unity') {
