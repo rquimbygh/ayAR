@@ -118,7 +118,7 @@ export class ArVideoComponent implements OnInit {
   onShapeChange(newShape) {
     this.options.model = null;
     this.options.geometryType = newShape;
-    this.basicGeometry();
+    this.showAR();
   }
 
   onArTypeChange(newType){
@@ -189,7 +189,6 @@ export class ArVideoComponent implements OnInit {
     // Create a webgl renderer using the component canvasRef
     var renderer = new THREE.WebGLRenderer({ antialias: true, canvas: this.canvas });
     let rotationV = 0;
-    let rotationTarget = 0;
     this.service.setCameraSize(arController, renderer);
 
     arController.loadMarker('assets/Data/patt.hiro', function(markerId) {
@@ -203,7 +202,7 @@ export class ArVideoComponent implements OnInit {
     var tick = () => {
       if (this.options.arType == 'trackHiro') {
         arScene.process();
-        rotationV += (rotationTarget - model.rotation.z) * 0.05;
+        rotationV += (this.options.rotationTarget - model.rotation.z) * 0.05;
         model.rotation.z += rotationV;
         rotationV *= 0.8;
         arScene.renderOn(renderer);
@@ -221,13 +220,4 @@ export class ArVideoComponent implements OnInit {
     e.preventDefault();
     this.options.rotationTarget += 1;
   }
-
-  clearCanvas(){
-    //TODO ctx is coming back null
-    var ctx = this.canvas.getContext('2d');
-    var w = this.canvas.width;
-    var h = this.canvas.height;
-    ctx.clearRect(0, 0 , w, h);
-  }
-
 }

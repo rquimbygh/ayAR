@@ -2,14 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ThreeService {
-  public renderer = new THREE.WebGLRenderer({ antialias: true });
 
-  // scene
-  // camera
-  // lighting
-  // object
-  //  shape define
-  //  texture
+  public renderer = new THREE.WebGLRenderer({ antialias: true });
 
   constructor() { }
 
@@ -89,7 +83,11 @@ export class ThreeService {
     );
   }
 
-  createFromObjFile(objUrl, cb){
+  // WARNING:
+  // need different version of three.js to use this
+  // than what is used for pattern-marker tracking
+  // use js/OBJLoader.js and js/three.js
+  createModelFromObj(objUrl, cb){
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( item, loaded, total ) {
       console.log( item, loaded, total );
@@ -97,9 +95,7 @@ export class ThreeService {
 
     var loader = new THREE.OBJLoader( manager );
     loader.load(
-      // resource URL
       objUrl,
-
       // pass the loaded data to the onLoad function.
       // Here it is assumed to be an object
       function ( obj ) {             
@@ -111,12 +107,10 @@ export class ThreeService {
           cb( obj );
         }
       },
-
       // Function called when download progresses
       function ( xhr ) {
           console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
       },
-
       // Function called when download errors
       function ( xhr ) {
           console.error( 'An error happened' );
