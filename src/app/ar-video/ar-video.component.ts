@@ -129,11 +129,12 @@ export class ArVideoComponent implements OnInit {
 
   basicGeometry() {    
     var scene = new THREE.Scene();
+    this.arScene = scene;
+    
     var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
 
     var model = this.options.model || this.three.createModel(this.options.geometryType);
     model.position.set(3,2,0);
-    this.arScene = scene;
 
     var renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
     renderer.setSize( this.width, this.height );
@@ -156,26 +157,34 @@ export class ArVideoComponent implements OnInit {
   }
 
   unityModel(){
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );    
-    this.arScene = scene;
-
+    var camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 1000 );
     camera.position.z = 5;
 
     var renderer = new THREE.WebGLRenderer({alpha: true, canvas: this.canvas});
-    renderer.setSize( this.width, this.height );
-
-    this.three.createFromObjFile("assets/fish.obj", (obj) => scene.add(obj));
+    renderer.setSize(this.width, this.height);
 
     var animate = () => {
       if (this.options.arType == 'unity') {
         requestAnimationFrame( animate );
   
-        renderer.render(scene, camera);
+        renderer.render(this.arScene, camera);
       } 
     };
 
-    animate();
+    this.three.createModelFromJson("assets/fish.json", (obj) => {
+      let scene = obj;
+      let model = obj.children[0];
+
+      var texture = THREE.ImageUtils.loadTexture('assets/cruscarp.png', {}, function() {
+        renderer.render(scene, camera);
+      });
+      model.material = new THREE.MeshBasicMaterial({map: texture });
+      model.position.z = 0.5;
+
+      this.arScene = scene;
+      this.options.model = model;
+      animate();
+    });
   }
 
   arCallback(arScene, arController, arCamera) {    

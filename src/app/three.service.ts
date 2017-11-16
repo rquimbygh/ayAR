@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 export class ThreeService {
 
   public renderer = new THREE.WebGLRenderer({ antialias: true });
-
   constructor() { }
 
   getRenderer() {
@@ -60,25 +59,20 @@ export class ThreeService {
     return torus;
   }
 
-  createFromJsonFile(url, cb){
+  createModelFromJson(url, onload){  
     var loader = new THREE.ObjectLoader();
     loader.load(
-      // resource URL
       url,
-
-    // Function when resource is loaded
-	  function ( obj ) {      
-        cb( obj.children[0] );    
+      (obj) => {
+        onload(obj);
       },
-      
       // Function called when download progresses
-      function ( xhr ) {
-          console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+      function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
       },
-  
       // Function called when download errors
-      function ( xhr ) {
-          console.error( 'An error happened' );
+      function (xhr) {
+        console.error( 'An error happened' );
       }
     );
   }
@@ -89,31 +83,31 @@ export class ThreeService {
   // use js/OBJLoader.js and js/three.js
   createModelFromObj(objUrl, cb){
     var manager = new THREE.LoadingManager();
-    manager.onProgress = function ( item, loaded, total ) {
-      console.log( item, loaded, total );
+    manager.onProgress = function (item, loaded, total) {
+      console.log(item, loaded, total);
     };
 
-    var loader = new THREE.OBJLoader( manager );
+    var loader = new THREE.OBJLoader(manager);
     loader.load(
       objUrl,
       // pass the loaded data to the onLoad function.
       // Here it is assumed to be an object
-      function ( obj ) {             
+      function (obj) {             
         if (obj instanceof THREE.Group) {
           //groups can be added to a scene directly
-          cb( obj );
+          cb(obj);
         } else{
           // maybe do other things to other types
-          cb( obj );
+          cb(obj);
         }
       },
       // Function called when download progresses
-      function ( xhr ) {
-          console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+      function (xhr) {
+        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
       },
       // Function called when download errors
-      function ( xhr ) {
-          console.error( 'An error happened' );
+      function (xhr) {
+        console.error( 'An error happened' );
       }
     );
   }
